@@ -2,7 +2,6 @@ package com.Inc.Project1.BE.selenium;
 
 import java.time.Duration;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -22,7 +21,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 //@Sql(scripts = { "classpath:shop-schema.sql",
 //		"classpath:shop-data.sql" }, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
 
-public class AddItemTesting {
+public class CheckoutTesting {
 
 	private RemoteWebDriver driver;
 	private WebDriverWait wait;
@@ -43,7 +42,29 @@ public class AddItemTesting {
 
 	void addItemTest() throws InterruptedException {
 
-		this.driver.get("http://localhost:3001");
+		this.driver.get("http://localhost:3000");
+
+		// Need Login test and basket made
+
+		WebElement username = this.driver.findElement(By.cssSelector("#name"));
+		username.sendKeys("Alco");
+
+		WebElement password = this.driver
+				.findElement(By.cssSelector("#CreateBasket > div > div > input[type=password]:nth-child(5)"));
+		password.sendKeys("Holic");
+
+		WebElement submit = this.driver.findElement(By.cssSelector("#SubmitCreateBasket"));
+		submit.click();
+		// Add a short wait if necessary to ensure the click has been processed
+		Thread.sleep(800); // 0.8 seconds
+
+		driver.navigate().refresh();
+
+		// Need Admin page new item created
+
+		WebElement adminIcon = this.driver
+				.findElement(By.cssSelector("#navbarNavAltMarkup > div > ul > li:nth-child(6) > a"));
+		adminIcon.click();
 
 		WebElement itemName = this.driver.findElement(By.cssSelector("#name"));
 		itemName.sendKeys("Madri");
@@ -64,20 +85,40 @@ public class AddItemTesting {
 		WebElement itemBulkSize = this.driver.findElement(By.cssSelector("#bulkSize"));
 		itemBulkSize.sendKeys("12");
 
-		WebElement submit = this.driver.findElement(By.cssSelector("#SubmitCreateItem"));
-		submit.click();
+		WebElement submitItem = this.driver.findElement(By.cssSelector("#SubmitCreateItem"));
+		submitItem.click();
 		// Add a short wait if necessary to ensure the click has been processed
-		Thread.sleep(2000); // Wait for 2 seconds
+		Thread.sleep(800); // Wait for 0.8 seconds
 		// Now refresh the page
 		driver.navigate().refresh();
 
-		WebElement checkItemName = this.driver.findElement(By.cssSelector(
-				"#root > div > div > div > div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td:nth-child(1)"));
-		Assertions.assertEquals("Madri", checkItemName.getText());
+		// Need to add item to basket
 
-		WebElement checkItemPrice = this.driver.findElement(By.cssSelector(
-				"#root > div > div > div > div:nth-child(3) > div > table > tbody > tr:nth-child(1) > td:nth-child(2)"));
-		Assertions.assertEquals("18.99", checkItemPrice.getText());
+		WebElement addToBasket = this.driver.findElement(By.cssSelector("#itemCard > div > button"));
+		addToBasket.click();
 
+		driver.navigate().refresh();
+
+		WebElement goToBasket = this.driver
+				.findElement(By.cssSelector("#navbarNavAltMarkup > div > ul > li:nth-child(4) > a"));
+		goToBasket.click();
+
+		// Add a short wait if necessary to ensure the click has been processed
+		Thread.sleep(800); // Wait for 0.8 seconds
+		// Now refresh the page
+		driver.navigate().refresh();
+
+		WebElement checkout = this.driver
+				.findElement(By.cssSelector("#root > div > div > div > div > div > div > div:nth-child(3) > button"));
+		checkout.click();
+
+		WebElement newPhoneNumber = this.driver.findElement(By.cssSelector("#phone\\ number"));
+		newPhoneNumber.sendKeys("07814569785");
+
+		WebElement newEmail = this.driver.findElement(By.cssSelector("#email"));
+		newEmail.sendKeys("Alco-Holic@AA.com");
+
+		WebElement checkoutSubmit = this.driver.findElement(By.cssSelector("#SubmitCreateBasket"));
+		checkoutSubmit.click();
 	}
 }

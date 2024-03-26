@@ -1,12 +1,12 @@
 DROP TABLE `item`;
 DROP TABLE `basket`;
 DROP TABLE `checkout`;
-
+ 
 CREATE TABLE `basket` (
 	`id` INT PRIMARY KEY AUTO_INCREMENT,
 	`name` VARCHAR(255)
 );
-
+ 
 CREATE TABLE `item` (
 	`id` INT PRIMARY KEY AUTO_INCREMENT,
 	`name` VARCHAR(255),
@@ -18,7 +18,7 @@ CREATE TABLE `item` (
 	`bulk_size` VARCHAR(255),
 	FOREIGN KEY (`basket_id`) REFERENCES `basket` (`id`)
 );
-
+ 
 CREATE TABLE `checkout` (
 	`id` INT PRIMARY KEY AUTO_INCREMENT,
 	`email` VARCHAR(255),

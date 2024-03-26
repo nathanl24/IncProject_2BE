@@ -24,7 +24,7 @@ import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 @Sql(scripts = { "classpath:shop-schema.sql",
 		"classpath:shop-data.sql" }, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
 
-public class IncP1Testing {
+public class LoginTesting {
 
 	private RemoteWebDriver driver;
 	private WebDriverWait wait;
@@ -41,29 +41,36 @@ public class IncP1Testing {
 	}
 
 	@Test
-	@Order(1)	
-	
-	
-//	void testCreateBasket() 
-//
-//		this.driver.get("http://localhost:" + this.port);
-//
-//		WebElement newBasketName = this.driver.findElement(By.id("#name"));
-//		newBasketName.sendKeys("John");
-//
-//		WebElement newPassword = this.driver
-//				.findElement(By.cssSelector("#CreateBasket > div > div > input[type=password]:nth-child(5)"));
-//		newPassword.sendKeys("Joe");
-//
-//		WebElement submit = this.driver.findElement(By.id("#SubmitCreateBasket"));
-//		submit.click();
-//
-//		WebElement selectBasketPage = this.driver
-//				.findElement(By.id("#navbarNavAltMarkup > div > ul > li:nth-child(4)"));
-//		selectBasketPage.click();
-//
-//		WebElement checkBasketName = this.driver
-//				.findElement(By.cssSelector("/html/body/div/div/div/div/div/div/div/div[2]/h3/text()[2]"));
-//		Assertions.assertEquals("Basket Name: Basket 1", checkBasketName.getText());
-//	}
+	@Order(1)
+
+	void addItemTest() throws InterruptedException {
+
+		this.driver.get("http://localhost:3000");
+
+		WebElement username = this.driver.findElement(By.cssSelector("#name"));
+		username.sendKeys("Alco");
+
+		WebElement password = this.driver
+				.findElement(By.cssSelector("#CreateBasket > div > div > input[type=password]:nth-child(5)"));
+		password.sendKeys("Holic");
+
+		WebElement submit = this.driver.findElement(By.cssSelector("#SubmitCreateBasket"));
+		submit.click();
+		// Add a short wait if necessary to ensure the click has been processed
+		Thread.sleep(800); // 0.8 seconds
+		// Now refresh the page
+		driver.navigate().refresh();
+
+		WebElement basketIcon = this.driver
+				.findElement(By.cssSelector("#navbarNavAltMarkup > div > ul > li:nth-child(4) > a"));
+		basketIcon.click();
+		// Add a short wait if necessary to ensure the click has been processed
+		Thread.sleep(800); // 0.8 seconds
+		// Now refresh the page
+		driver.navigate().refresh();
+
+		WebElement checkBasketName = this.driver
+				.findElement(By.cssSelector("#root > div > div > div > div > div > div > div:nth-child(3) > h3"));
+		Assertions.assertEquals("Basket Name: Alco", checkBasketName.getText());
+	}
 }
